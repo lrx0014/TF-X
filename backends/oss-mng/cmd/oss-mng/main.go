@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"os"
+	"time"
 
 	"oss-mng/internal/conf"
 
@@ -25,12 +26,19 @@ var (
 	Version string
 	// flagconf is the config flag.
 	flagconf string
+	// etcd configs
+	etcdEntry   string
+	etcdPath    string
+	etcdTimeout int64 // in seconds
 
 	id, _ = os.Hostname()
 )
 
 func init() {
 	flag.StringVar(&flagconf, "conf", "../../configs", "config path, eg: -conf config.yaml")
+	flag.StringVar(&etcdEntry, "etcd", "", "etcd endpoint, e.g, 127.0.0.1:2379")
+	flag.StringVar(&etcdPath, "etcd_path", "/oss-mng", "etcd path, e.g, /app-conf")
+	flag.Int64Var(&etcdTimeout, "etcd_timeout", 60, "etcd timeout in seconds, default to 60")
 }
 
 func newApp(logger log.Logger, gs *grpc.Server, hs *http.Server) *kratos.App {
@@ -58,9 +66,10 @@ func main() {
 		"trace.id", tracing.TraceID(),
 		"span.id", tracing.SpanID(),
 	)
+
 	c := config.New(
 		config.WithSource(
-			file.NewSource(flagconf),
+			makeSources()...,
 		),
 	)
 	defer c.Close()
@@ -84,4 +93,15 @@ func main() {
 	if err := app.Run(); err != nil {
 		panic(err)
 	}
+}
+
+func makeSources() (sources []config.Source) {
+	if flagconf != "" {
+		sources = append(sources, file.NewSource(flagconf))
+	}
+	if etcdEntry != "" {
+		sources = append(sources, conf.NewEtcdSource(etcdEntry, etcdPath, time.Duration(etcdTimeout)*time.Second))
+	}
+
+	return
 }
