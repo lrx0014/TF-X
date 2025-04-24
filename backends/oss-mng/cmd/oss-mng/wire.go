@@ -6,9 +6,7 @@
 package main
 
 import (
-	"oss-mng/internal/biz"
 	"oss-mng/internal/conf"
-	"oss-mng/internal/data"
 	"oss-mng/internal/server"
 	"oss-mng/internal/service"
 
@@ -19,5 +17,5 @@ import (
 
 // wireApp init kratos application.
 func wireApp(*conf.Server, *conf.Data, log.Logger) (*kratos.App, func(), error) {
-	panic(wire.Build(server.ProviderSet, data.ProviderSet, biz.ProviderSet, service.ProviderSet, newApp))
+	panic(wire.Build(server.ProviderSet, service.ProviderSet, newApp))
 }

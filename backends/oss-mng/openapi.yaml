@@ -3,37 +3,29 @@
 
 openapi: 3.0.3
 info:
-    title: Greeter API
-    description: The greeting service definition.
+    title: Version API
     version: 0.0.1
 paths:
-    /helloworld/{name}:
+    /oss-mng/version:
         get:
             tags:
-                - Greeter
-                - subgroup
-            description: Sends a greeting
-            operationId: Greeter_SayHello
-            parameters:
-                - name: name
-                  in: path
-                  required: true
-                  schema:
-                    type: string
+                - Version
+            operationId: Version_Version
             responses:
                 "200":
                     description: OK
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/helloworld.v1.HelloReply'
+                                $ref: '#/components/schemas/version.VersionReply'
 components:
     schemas:
-        helloworld.v1.HelloReply:
+        version.VersionReply:
             type: object
             properties:
-                message:
+                name:
                     type: string
-            description: The response message containing the greetings
+                version:
+                    type: string
 tags:
-    - name: Greeter
+    - name: Version

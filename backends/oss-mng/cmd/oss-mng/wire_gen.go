@@ -7,13 +7,11 @@
 package main
 
 import (
-	"oss-mng/internal/biz"
-	"oss-mng/internal/conf"
-	"oss-mng/internal/data"
-	"oss-mng/internal/server"
-	"oss-mng/internal/service"
 	"github.com/go-kratos/kratos/v2"
 	"github.com/go-kratos/kratos/v2/log"
+	"oss-mng/internal/conf"
+	"oss-mng/internal/server"
+	"oss-mng/internal/service/version"
 )
 
 import (
@@ -23,18 +21,11 @@ import (
 // Injectors from wire.go:
 
 // wireApp init kratos application.
-func wireApp(confServer *conf.Server, confData *conf.Data, logger log.Logger) (*kratos.App, func(), error) {
-	dataData, cleanup, err := data.NewData(confData, logger)
-	if err != nil {
-		return nil, nil, err
-	}
-	greeterRepo := data.NewGreeterRepo(dataData, logger)
-	greeterUsecase := biz.NewGreeterUsecase(greeterRepo, logger)
-	greeterService := service.NewGreeterService(greeterUsecase)
-	grpcServer := server.NewGRPCServer(confServer, greeterService, logger)
-	httpServer := server.NewHTTPServer(confServer, greeterService, logger)
+func wireApp(confServer *conf.Server, data *conf.Data, logger log.Logger) (*kratos.App, func(), error) {
+	versionService := service.NewVersionService()
+	grpcServer := server.NewGRPCServer(confServer, versionService, logger)
+	httpServer := server.NewHTTPServer(confServer, versionService, logger)
 	app := newApp(logger, grpcServer, httpServer)
 	return app, func() {
-		cleanup()
 	}, nil
 }

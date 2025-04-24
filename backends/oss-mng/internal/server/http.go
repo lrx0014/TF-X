@@ -1,9 +1,9 @@
 package server
 
 import (
-	v1 "oss-mng/api/helloworld/v1"
+	verApi "oss-mng/api/version"
 	"oss-mng/internal/conf"
-	"oss-mng/internal/service"
+	ver "oss-mng/internal/service/version"
 
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/middleware/recovery"
@@ -11,7 +11,7 @@ import (
 )
 
 // NewHTTPServer new an HTTP server.
-func NewHTTPServer(c *conf.Server, greeter *service.GreeterService, logger log.Logger) *http.Server {
+func NewHTTPServer(c *conf.Server, version *ver.VersionService, logger log.Logger) *http.Server {
 	var opts = []http.ServerOption{
 		http.Middleware(
 			recovery.Recovery(),
@@ -27,6 +27,6 @@ func NewHTTPServer(c *conf.Server, greeter *service.GreeterService, logger log.L
 		opts = append(opts, http.Timeout(c.Http.Timeout.AsDuration()))
 	}
 	srv := http.NewServer(opts...)
-	v1.RegisterGreeterHTTPServer(srv, greeter)
+	verApi.RegisterVersionHTTPServer(srv, version)
 	return srv
 }

@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+package version;
+
+import "google/api/annotations.proto";
+import "google/protobuf/empty.proto";
+
+option go_package = "oss-mng/api/version;version";
+option java_multiple_files = true;
+option java_package = "dev.kratos.api.version";
+option java_outer_classname = "VersionProto";
+
+service Version {
+  rpc version (VersionReq) returns (VersionReply) {
+    option (google.api.http) = {
+      get: "/oss-mng/version"
+    };
+  }
+}
+
+message VersionReq {}
+
+message VersionReply {
+  string name = 1;
+  string version = 2;
+}
