@@ -4,7 +4,7 @@ package version;
 
 import "google/api/annotations.proto";
 
-option go_package = "oss-mng/api/version;version";
+option go_package = "auth/api/version;version";
 option java_multiple_files = true;
 option java_package = "dev.kratos.api.version";
 option java_outer_classname = "VersionProto";
@@ -12,7 +12,7 @@ option java_outer_classname = "VersionProto";
 service Version {
   rpc version (VersionReq) returns (VersionReply) {
     option (google.api.http) = {
-      get: "/oss-mng/version"
+      get: "/auth/version"
     };
   }
 }

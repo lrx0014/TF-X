@@ -1,0 +1,49 @@
+syntax = "proto3";
+
+package api.auth.v1;
+
+import "google/api/annotations.proto";
+
+option go_package = "auth/api/auth/v1;v1";
+option java_multiple_files = true;
+option java_package = "api.auth.v1";
+
+service Auth {
+	rpc Signup (SignupReq) returns (SignupResp) {
+		option (google.api.http) = {
+			get: "/auth/v1/sign_up"
+		};
+	}
+	rpc Login (LoginReq) returns (LoginResp) {
+		option (google.api.http) = {
+			get: "/auth/v1/login"
+		};
+	}
+	rpc DeleteAccount (DeleteAccountReq) returns (DeleteAccountResp);
+	rpc LockAccount (LockAccountReq) returns (LockAccountResp);
+	rpc UnlockAccount (UnlockAccountReq) returns (UnlockAccountResp);
+}
+
+message SignupReq {
+	string username = 1;
+	string hash_pwd = 2;
+}
+message SignupResp {}
+
+message LoginReq {
+	string username = 1;
+	string hash_pwd = 2;
+}
+message LoginResp {
+	string access_token = 1;
+	string refresh_token = 2;
+}
+
+message DeleteAccountReq {}
+message DeleteAccountResp {}
+
+message LockAccountReq {}
+message LockAccountResp {}
+
+message UnlockAccountReq {}
+message UnlockAccountResp {}

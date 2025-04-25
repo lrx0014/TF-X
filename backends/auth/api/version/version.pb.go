@@ -119,10 +119,10 @@ const file_version_version_proto_rawDesc = "" +
 	"VersionReq\"<\n" +
 	"\fVersionReply\x12\x12\n" +
 	"\x04name\x18\x01 \x01(\tR\x04name\x12\x18\n" +
-	"\aversion\x18\x02 \x01(\tR\aversion2Z\n" +
-	"\aVersion\x12O\n" +
-	"\aversion\x12\x13.version.VersionReq\x1a\x15.version.VersionReply\"\x18\x82\xd3\xe4\x93\x02\x12\x12\x10/oss-mng/versionBE\n" +
-	"\x16dev.kratos.api.versionB\fVersionProtoP\x01Z\x1boss-mng/api/version;versionb\x06proto3"
+	"\aversion\x18\x02 \x01(\tR\aversion2W\n" +
+	"\aVersion\x12L\n" +
+	"\aversion\x12\x13.version.VersionReq\x1a\x15.version.VersionReply\"\x15\x82\xd3\xe4\x93\x02\x0f\x12\r/auth/versionBB\n" +
+	"\x16dev.kratos.api.versionB\fVersionProtoP\x01Z\x18auth/api/version;versionb\x06proto3"
 
 var (
 	file_version_version_proto_rawDescOnce sync.Once

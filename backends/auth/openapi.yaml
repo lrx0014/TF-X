@@ -1,0 +1,84 @@
+# Generated with protoc-gen-openapi
+# https://github.com/google/gnostic/tree/master/cmd/protoc-gen-openapi
+
+openapi: 3.0.3
+info:
+    title: ""
+    version: 0.0.1
+paths:
+    /auth/v1/login:
+        get:
+            tags:
+                - Auth
+            operationId: Auth_Login
+            parameters:
+                - name: username
+                  in: query
+                  schema:
+                    type: string
+                - name: hashPwd
+                  in: query
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.auth.v1.LoginResp'
+    /auth/v1/sign_up:
+        get:
+            tags:
+                - Auth
+            operationId: Auth_Signup
+            parameters:
+                - name: username
+                  in: query
+                  schema:
+                    type: string
+                - name: hashPwd
+                  in: query
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.auth.v1.SignupResp'
+    /auth/version:
+        get:
+            tags:
+                - Version
+            operationId: Version_Version
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/version.VersionReply'
+components:
+    schemas:
+        api.auth.v1.LoginResp:
+            type: object
+            properties:
+                accessToken:
+                    type: string
+                refreshToken:
+                    type: string
+        api.auth.v1.SignupResp:
+            type: object
+            properties: {}
+        version.VersionReply:
+            type: object
+            properties:
+                name:
+                    type: string
+                version:
+                    type: string
+tags:
+    - name: Auth
+    - name: Version
