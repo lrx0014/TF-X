@@ -20,6 +20,5 @@ WORKDIR /app
 
 EXPOSE 8000
 EXPOSE 9000
-VOLUME /data/conf
 
 CMD ["./oss-mng", "-conf", "/app/configs"]
