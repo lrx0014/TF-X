@@ -29,13 +29,16 @@ type AuthHTTPServer interface {
 
 func RegisterAuthHTTPServer(s *http.Server, srv AuthHTTPServer) {
 	r := s.Route("/")
-	r.GET("/auth/v1/sign_up", _Auth_Signup0_HTTP_Handler(srv))
-	r.GET("/auth/v1/login", _Auth_Login0_HTTP_Handler(srv))
+	r.POST("/auth/v1/sign_up", _Auth_Signup0_HTTP_Handler(srv))
+	r.POST("/auth/v1/login", _Auth_Login0_HTTP_Handler(srv))
 }
 
 func _Auth_Signup0_HTTP_Handler(srv AuthHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in SignupReq
+		if err := ctx.Bind(&in); err != nil {
+			return err
+		}
 		if err := ctx.BindQuery(&in); err != nil {
 			return err
 		}
@@ -55,6 +58,9 @@ func _Auth_Signup0_HTTP_Handler(srv AuthHTTPServer) func(ctx http.Context) error
 func _Auth_Login0_HTTP_Handler(srv AuthHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in LoginReq
+		if err := ctx.Bind(&in); err != nil {
+			return err
+		}
 		if err := ctx.BindQuery(&in); err != nil {
 			return err
 		}
@@ -87,10 +93,10 @@ func NewAuthHTTPClient(client *http.Client) AuthHTTPClient {
 func (c *AuthHTTPClientImpl) Login(ctx context.Context, in *LoginReq, opts ...http.CallOption) (*LoginResp, error) {
 	var out LoginResp
 	pattern := "/auth/v1/login"
-	path := binding.EncodeURL(pattern, in, true)
+	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation(OperationAuthLogin))
 	opts = append(opts, http.PathTemplate(pattern))
-	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
+	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -100,10 +106,10 @@ func (c *AuthHTTPClientImpl) Login(ctx context.Context, in *LoginReq, opts ...ht
 func (c *AuthHTTPClientImpl) Signup(ctx context.Context, in *SignupReq, opts ...http.CallOption) (*SignupResp, error) {
 	var out SignupResp
 	pattern := "/auth/v1/sign_up"
-	path := binding.EncodeURL(pattern, in, true)
+	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation(OperationAuthSignup))
 	opts = append(opts, http.PathTemplate(pattern))
-	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
+	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
 	if err != nil {
 		return nil, err
 	}

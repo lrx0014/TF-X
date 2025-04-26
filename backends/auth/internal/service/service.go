@@ -6,5 +6,5 @@ import (
 	"github.com/google/wire"
 )
 
-// ProviderSet is service providers.
-var ProviderSet = wire.NewSet(v1.NewAuthService, ver.NewVersionService)
+// ProviderService is service providers.
+var ProviderService = wire.NewSet(v1.NewAuthService, ver.NewVersionService)

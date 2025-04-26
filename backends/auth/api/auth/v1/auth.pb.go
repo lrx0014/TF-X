@@ -76,6 +76,7 @@ func (x *SignupReq) GetHashPwd() string {
 
 type SignupResp struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	Uid           int64                  `protobuf:"varint,1,opt,name=uid,proto3" json:"uid,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -110,9 +111,16 @@ func (*SignupResp) Descriptor() ([]byte, []int) {
 	return file_auth_v1_auth_proto_rawDescGZIP(), []int{1}
 }
 
+func (x *SignupResp) GetUid() int64 {
+	if x != nil {
+		return x.Uid
+	}
+	return 0
+}
+
 type LoginReq struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Username      string                 `protobuf:"bytes,1,opt,name=username,proto3" json:"username,omitempty"`
+	Uid           int64                  `protobuf:"varint,1,opt,name=uid,proto3" json:"uid,omitempty"`
 	HashPwd       string                 `protobuf:"bytes,2,opt,name=hash_pwd,json=hashPwd,proto3" json:"hash_pwd,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -148,11 +156,11 @@ func (*LoginReq) Descriptor() ([]byte, []int) {
 	return file_auth_v1_auth_proto_rawDescGZIP(), []int{2}
 }
 
-func (x *LoginReq) GetUsername() string {
+func (x *LoginReq) GetUid() int64 {
 	if x != nil {
-		return x.Username
+		return x.Uid
 	}
-	return ""
+	return 0
 }
 
 func (x *LoginReq) GetHashPwd() string {
@@ -437,11 +445,12 @@ const file_auth_v1_auth_proto_rawDesc = "" +
 	"\x12auth/v1/auth.proto\x12\vapi.auth.v1\x1a\x1cgoogle/api/annotations.proto\"B\n" +
 	"\tSignupReq\x12\x1a\n" +
 	"\busername\x18\x01 \x01(\tR\busername\x12\x19\n" +
-	"\bhash_pwd\x18\x02 \x01(\tR\ahashPwd\"\f\n" +
+	"\bhash_pwd\x18\x02 \x01(\tR\ahashPwd\"\x1e\n" +
 	"\n" +
-	"SignupResp\"A\n" +
-	"\bLoginReq\x12\x1a\n" +
-	"\busername\x18\x01 \x01(\tR\busername\x12\x19\n" +
+	"SignupResp\x12\x10\n" +
+	"\x03uid\x18\x01 \x01(\x03R\x03uid\"7\n" +
+	"\bLoginReq\x12\x10\n" +
+	"\x03uid\x18\x01 \x01(\x03R\x03uid\x12\x19\n" +
 	"\bhash_pwd\x18\x02 \x01(\tR\ahashPwd\"S\n" +
 	"\tLoginResp\x12!\n" +
 	"\faccess_token\x18\x01 \x01(\tR\vaccessToken\x12#\n" +
@@ -451,10 +460,10 @@ const file_auth_v1_auth_proto_rawDesc = "" +
 	"\x0eLockAccountReq\"\x11\n" +
 	"\x0fLockAccountResp\"\x12\n" +
 	"\x10UnlockAccountReq\"\x13\n" +
-	"\x11UnlockAccountResp2\x95\x03\n" +
-	"\x04Auth\x12S\n" +
-	"\x06Signup\x12\x16.api.auth.v1.SignupReq\x1a\x17.api.auth.v1.SignupResp\"\x18\x82\xd3\xe4\x93\x02\x12\x12\x10/auth/v1/sign_up\x12N\n" +
-	"\x05Login\x12\x15.api.auth.v1.LoginReq\x1a\x16.api.auth.v1.LoginResp\"\x16\x82\xd3\xe4\x93\x02\x10\x12\x0e/auth/v1/login\x12N\n" +
+	"\x11UnlockAccountResp2\x9b\x03\n" +
+	"\x04Auth\x12V\n" +
+	"\x06Signup\x12\x16.api.auth.v1.SignupReq\x1a\x17.api.auth.v1.SignupResp\"\x1b\x82\xd3\xe4\x93\x02\x15:\x01*\"\x10/auth/v1/sign_up\x12Q\n" +
+	"\x05Login\x12\x15.api.auth.v1.LoginReq\x1a\x16.api.auth.v1.LoginResp\"\x19\x82\xd3\xe4\x93\x02\x13:\x01*\"\x0e/auth/v1/login\x12N\n" +
 	"\rDeleteAccount\x12\x1d.api.auth.v1.DeleteAccountReq\x1a\x1e.api.auth.v1.DeleteAccountResp\x12H\n" +
 	"\vLockAccount\x12\x1b.api.auth.v1.LockAccountReq\x1a\x1c.api.auth.v1.LockAccountResp\x12N\n" +
 	"\rUnlockAccount\x12\x1d.api.auth.v1.UnlockAccountReq\x1a\x1e.api.auth.v1.UnlockAccountRespB$\n" +

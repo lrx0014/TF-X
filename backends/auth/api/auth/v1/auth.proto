@@ -11,12 +11,14 @@ option java_package = "api.auth.v1";
 service Auth {
 	rpc Signup (SignupReq) returns (SignupResp) {
 		option (google.api.http) = {
-			get: "/auth/v1/sign_up"
+			post: "/auth/v1/sign_up"
+			body: "*"
 		};
 	}
 	rpc Login (LoginReq) returns (LoginResp) {
 		option (google.api.http) = {
-			get: "/auth/v1/login"
+			post: "/auth/v1/login"
+			body: "*"
 		};
 	}
 	rpc DeleteAccount (DeleteAccountReq) returns (DeleteAccountResp);
@@ -28,12 +30,16 @@ message SignupReq {
 	string username = 1;
 	string hash_pwd = 2;
 }
-message SignupResp {}
+
+message SignupResp {
+	int64 uid = 1;
+}
 
 message LoginReq {
-	string username = 1;
+	int64 uid = 1;
 	string hash_pwd = 2;
 }
+
 message LoginResp {
 	string access_token = 1;
 	string refresh_token = 2;
