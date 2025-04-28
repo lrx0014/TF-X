@@ -2,6 +2,7 @@ package service
 
 import (
 	"auth/internal/biz"
+	"auth/internal/conf"
 	"auth/internal/global"
 	"context"
 
@@ -10,18 +11,43 @@ import (
 
 type AuthService struct {
 	pb.UnimplementedAuthServer
+	appConf *conf.App
 
 	uc *biz.UserUseCase
 }
 
-func NewAuthService(uc *biz.UserUseCase) *AuthService {
+func NewAuthService(uc *biz.UserUseCase, appCond *conf.App) *AuthService {
 	return &AuthService{
-		uc: uc,
+		appConf: appCond,
+		uc:      uc,
 	}
 }
 
-func (s *AuthService) CreateAccount(ctx context.Context, req *pb.CreateAccountReq) (*pb.CreateAccountResp, error) {
-	return &pb.CreateAccountResp{}, nil
+func (s *AuthService) CreateAccount(ctx context.Context, req *pb.CreateAccountReq) (resp *pb.CreateAccountResp, err error) {
+	resp = &pb.CreateAccountResp{}
+	// validate request params
+	if int64(len(req.Username)) < s.appConf.ParamValidator.UsernameMin || int64(len(req.Username)) > s.appConf.ParamValidator.UsernameMax {
+		err = global.ErrUsernameValidation
+		return
+	}
+	if int64(len(req.Pwd)) < s.appConf.ParamValidator.PasswordMin || int64(len(req.Pwd)) > s.appConf.ParamValidator.PasswordMax {
+		err = global.ErrPasswordValidation
+		return
+	}
+
+	// TODO generate an UID
+
+	user := &biz.User{
+		UID:      0,
+		Username: req.Username,
+		Pwd:      req.Pwd,
+	}
+	err = s.uc.CreateUser(ctx, user)
+	if err != nil {
+		return
+	}
+
+	return
 }
 
 func (s *AuthService) Login(ctx context.Context, req *pb.LoginReq) (resp *pb.LoginResp, err error) {

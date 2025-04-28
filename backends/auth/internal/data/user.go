@@ -16,6 +16,11 @@ func NewUserRepo(data *Data) biz.UserRepo {
 }
 
 func (u *userRepo) UserByID(ctx context.Context, uid int64) (user *biz.User, err error) {
-	u.data.db.First(&user, "uid = ?", uid)
+	err = u.data.db.First(&user, "uid = ?", uid).Error
+	return
+}
+
+func (u *userRepo) CreateUser(ctx context.Context, user *biz.User) (err error) {
+	err = u.data.db.Create(&user).Error
 	return
 }
