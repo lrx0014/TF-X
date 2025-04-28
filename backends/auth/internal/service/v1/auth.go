@@ -20,9 +20,10 @@ func NewAuthService(uc *biz.UserUseCase) *AuthService {
 	}
 }
 
-func (s *AuthService) Signup(ctx context.Context, req *pb.SignupReq) (*pb.SignupResp, error) {
-	return &pb.SignupResp{}, nil
+func (s *AuthService) CreateAccount(ctx context.Context, req *pb.CreateAccountReq) (*pb.CreateAccountResp, error) {
+	return &pb.CreateAccountResp{}, nil
 }
+
 func (s *AuthService) Login(ctx context.Context, req *pb.LoginReq) (resp *pb.LoginResp, err error) {
 	resp = &pb.LoginResp{}
 	user, err := s.uc.GetUserByID(ctx, req.Uid)
@@ -41,12 +42,15 @@ func (s *AuthService) Login(ctx context.Context, req *pb.LoginReq) (resp *pb.Log
 
 	return
 }
+
 func (s *AuthService) DeleteAccount(ctx context.Context, req *pb.DeleteAccountReq) (*pb.DeleteAccountResp, error) {
 	return &pb.DeleteAccountResp{}, nil
 }
+
 func (s *AuthService) LockAccount(ctx context.Context, req *pb.LockAccountReq) (*pb.LockAccountResp, error) {
 	return &pb.LockAccountResp{}, nil
 }
+
 func (s *AuthService) UnlockAccount(ctx context.Context, req *pb.UnlockAccountReq) (*pb.UnlockAccountResp, error) {
 	return &pb.UnlockAccountResp{}, nil
 }

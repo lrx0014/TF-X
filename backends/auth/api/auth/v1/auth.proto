@@ -9,7 +9,7 @@ option java_multiple_files = true;
 option java_package = "api.auth.v1";
 
 service Auth {
-	rpc Signup (SignupReq) returns (SignupResp) {
+	rpc CreateAccount (CreateAccountReq) returns (CreateAccountResp) {
 		option (google.api.http) = {
 			post: "/auth/v1/sign_up"
 			body: "*"
@@ -26,18 +26,18 @@ service Auth {
 	rpc UnlockAccount (UnlockAccountReq) returns (UnlockAccountResp);
 }
 
-message SignupReq {
+message CreateAccountReq {
 	string username = 1;
-	string hash_pwd = 2;
+	string pwd = 2;
 }
 
-message SignupResp {
+message CreateAccountResp {
 	int64 uid = 1;
 }
 
 message LoginReq {
 	int64 uid = 1;
-	string hash_pwd = 2;
+	string pwd = 2;
 }
 
 message LoginResp {

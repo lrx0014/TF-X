@@ -19,7 +19,7 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	Auth_Signup_FullMethodName        = "/api.auth.v1.Auth/Signup"
+	Auth_CreateAccount_FullMethodName = "/api.auth.v1.Auth/CreateAccount"
 	Auth_Login_FullMethodName         = "/api.auth.v1.Auth/Login"
 	Auth_DeleteAccount_FullMethodName = "/api.auth.v1.Auth/DeleteAccount"
 	Auth_LockAccount_FullMethodName   = "/api.auth.v1.Auth/LockAccount"
@@ -30,7 +30,7 @@ const (
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type AuthClient interface {
-	Signup(ctx context.Context, in *SignupReq, opts ...grpc.CallOption) (*SignupResp, error)
+	CreateAccount(ctx context.Context, in *CreateAccountReq, opts ...grpc.CallOption) (*CreateAccountResp, error)
 	Login(ctx context.Context, in *LoginReq, opts ...grpc.CallOption) (*LoginResp, error)
 	DeleteAccount(ctx context.Context, in *DeleteAccountReq, opts ...grpc.CallOption) (*DeleteAccountResp, error)
 	LockAccount(ctx context.Context, in *LockAccountReq, opts ...grpc.CallOption) (*LockAccountResp, error)
@@ -45,10 +45,10 @@ func NewAuthClient(cc grpc.ClientConnInterface) AuthClient {
 	return &authClient{cc}
 }
 
-func (c *authClient) Signup(ctx context.Context, in *SignupReq, opts ...grpc.CallOption) (*SignupResp, error) {
+func (c *authClient) CreateAccount(ctx context.Context, in *CreateAccountReq, opts ...grpc.CallOption) (*CreateAccountResp, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(SignupResp)
-	err := c.cc.Invoke(ctx, Auth_Signup_FullMethodName, in, out, cOpts...)
+	out := new(CreateAccountResp)
+	err := c.cc.Invoke(ctx, Auth_CreateAccount_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -99,7 +99,7 @@ func (c *authClient) UnlockAccount(ctx context.Context, in *UnlockAccountReq, op
 // All implementations must embed UnimplementedAuthServer
 // for forward compatibility.
 type AuthServer interface {
-	Signup(context.Context, *SignupReq) (*SignupResp, error)
+	CreateAccount(context.Context, *CreateAccountReq) (*CreateAccountResp, error)
 	Login(context.Context, *LoginReq) (*LoginResp, error)
 	DeleteAccount(context.Context, *DeleteAccountReq) (*DeleteAccountResp, error)
 	LockAccount(context.Context, *LockAccountReq) (*LockAccountResp, error)
@@ -114,8 +114,8 @@ type AuthServer interface {
 // pointer dereference when methods are called.
 type UnimplementedAuthServer struct{}
 
-func (UnimplementedAuthServer) Signup(context.Context, *SignupReq) (*SignupResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Signup not implemented")
+func (UnimplementedAuthServer) CreateAccount(context.Context, *CreateAccountReq) (*CreateAccountResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateAccount not implemented")
 }
 func (UnimplementedAuthServer) Login(context.Context, *LoginReq) (*LoginResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Login not implemented")
@@ -150,20 +150,20 @@ func RegisterAuthServer(s grpc.ServiceRegistrar, srv AuthServer) {
 	s.RegisterService(&Auth_ServiceDesc, srv)
 }
 
-func _Auth_Signup_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(SignupReq)
+func _Auth_CreateAccount_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateAccountReq)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(AuthServer).Signup(ctx, in)
+		return srv.(AuthServer).CreateAccount(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Auth_Signup_FullMethodName,
+		FullMethod: Auth_CreateAccount_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AuthServer).Signup(ctx, req.(*SignupReq))
+		return srv.(AuthServer).CreateAccount(ctx, req.(*CreateAccountReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -248,8 +248,8 @@ var Auth_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*AuthServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "Signup",
-			Handler:    _Auth_Signup_Handler,
+			MethodName: "CreateAccount",
+			Handler:    _Auth_CreateAccount_Handler,
 		},
 		{
 			MethodName: "Login",

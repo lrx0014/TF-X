@@ -22,28 +22,28 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-type SignupReq struct {
+type CreateAccountReq struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Username      string                 `protobuf:"bytes,1,opt,name=username,proto3" json:"username,omitempty"`
-	HashPwd       string                 `protobuf:"bytes,2,opt,name=hash_pwd,json=hashPwd,proto3" json:"hash_pwd,omitempty"`
+	Pwd           string                 `protobuf:"bytes,2,opt,name=pwd,proto3" json:"pwd,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *SignupReq) Reset() {
-	*x = SignupReq{}
+func (x *CreateAccountReq) Reset() {
+	*x = CreateAccountReq{}
 	mi := &file_auth_v1_auth_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *SignupReq) String() string {
+func (x *CreateAccountReq) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*SignupReq) ProtoMessage() {}
+func (*CreateAccountReq) ProtoMessage() {}
 
-func (x *SignupReq) ProtoReflect() protoreflect.Message {
+func (x *CreateAccountReq) ProtoReflect() protoreflect.Message {
 	mi := &file_auth_v1_auth_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -55,46 +55,46 @@ func (x *SignupReq) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use SignupReq.ProtoReflect.Descriptor instead.
-func (*SignupReq) Descriptor() ([]byte, []int) {
+// Deprecated: Use CreateAccountReq.ProtoReflect.Descriptor instead.
+func (*CreateAccountReq) Descriptor() ([]byte, []int) {
 	return file_auth_v1_auth_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *SignupReq) GetUsername() string {
+func (x *CreateAccountReq) GetUsername() string {
 	if x != nil {
 		return x.Username
 	}
 	return ""
 }
 
-func (x *SignupReq) GetHashPwd() string {
+func (x *CreateAccountReq) GetPwd() string {
 	if x != nil {
-		return x.HashPwd
+		return x.Pwd
 	}
 	return ""
 }
 
-type SignupResp struct {
+type CreateAccountResp struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Uid           int64                  `protobuf:"varint,1,opt,name=uid,proto3" json:"uid,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *SignupResp) Reset() {
-	*x = SignupResp{}
+func (x *CreateAccountResp) Reset() {
+	*x = CreateAccountResp{}
 	mi := &file_auth_v1_auth_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *SignupResp) String() string {
+func (x *CreateAccountResp) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*SignupResp) ProtoMessage() {}
+func (*CreateAccountResp) ProtoMessage() {}
 
-func (x *SignupResp) ProtoReflect() protoreflect.Message {
+func (x *CreateAccountResp) ProtoReflect() protoreflect.Message {
 	mi := &file_auth_v1_auth_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -106,12 +106,12 @@ func (x *SignupResp) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use SignupResp.ProtoReflect.Descriptor instead.
-func (*SignupResp) Descriptor() ([]byte, []int) {
+// Deprecated: Use CreateAccountResp.ProtoReflect.Descriptor instead.
+func (*CreateAccountResp) Descriptor() ([]byte, []int) {
 	return file_auth_v1_auth_proto_rawDescGZIP(), []int{1}
 }
 
-func (x *SignupResp) GetUid() int64 {
+func (x *CreateAccountResp) GetUid() int64 {
 	if x != nil {
 		return x.Uid
 	}
@@ -121,7 +121,7 @@ func (x *SignupResp) GetUid() int64 {
 type LoginReq struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Uid           int64                  `protobuf:"varint,1,opt,name=uid,proto3" json:"uid,omitempty"`
-	HashPwd       string                 `protobuf:"bytes,2,opt,name=hash_pwd,json=hashPwd,proto3" json:"hash_pwd,omitempty"`
+	Pwd           string                 `protobuf:"bytes,2,opt,name=pwd,proto3" json:"pwd,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -163,9 +163,9 @@ func (x *LoginReq) GetUid() int64 {
 	return 0
 }
 
-func (x *LoginReq) GetHashPwd() string {
+func (x *LoginReq) GetPwd() string {
 	if x != nil {
-		return x.HashPwd
+		return x.Pwd
 	}
 	return ""
 }
@@ -442,16 +442,15 @@ var File_auth_v1_auth_proto protoreflect.FileDescriptor
 
 const file_auth_v1_auth_proto_rawDesc = "" +
 	"\n" +
-	"\x12auth/v1/auth.proto\x12\vapi.auth.v1\x1a\x1cgoogle/api/annotations.proto\"B\n" +
-	"\tSignupReq\x12\x1a\n" +
-	"\busername\x18\x01 \x01(\tR\busername\x12\x19\n" +
-	"\bhash_pwd\x18\x02 \x01(\tR\ahashPwd\"\x1e\n" +
-	"\n" +
-	"SignupResp\x12\x10\n" +
-	"\x03uid\x18\x01 \x01(\x03R\x03uid\"7\n" +
+	"\x12auth/v1/auth.proto\x12\vapi.auth.v1\x1a\x1cgoogle/api/annotations.proto\"@\n" +
+	"\x10CreateAccountReq\x12\x1a\n" +
+	"\busername\x18\x01 \x01(\tR\busername\x12\x10\n" +
+	"\x03pwd\x18\x02 \x01(\tR\x03pwd\"%\n" +
+	"\x11CreateAccountResp\x12\x10\n" +
+	"\x03uid\x18\x01 \x01(\x03R\x03uid\".\n" +
 	"\bLoginReq\x12\x10\n" +
-	"\x03uid\x18\x01 \x01(\x03R\x03uid\x12\x19\n" +
-	"\bhash_pwd\x18\x02 \x01(\tR\ahashPwd\"S\n" +
+	"\x03uid\x18\x01 \x01(\x03R\x03uid\x12\x10\n" +
+	"\x03pwd\x18\x02 \x01(\tR\x03pwd\"S\n" +
 	"\tLoginResp\x12!\n" +
 	"\faccess_token\x18\x01 \x01(\tR\vaccessToken\x12#\n" +
 	"\rrefresh_token\x18\x02 \x01(\tR\frefreshToken\"\x12\n" +
@@ -460,9 +459,9 @@ const file_auth_v1_auth_proto_rawDesc = "" +
 	"\x0eLockAccountReq\"\x11\n" +
 	"\x0fLockAccountResp\"\x12\n" +
 	"\x10UnlockAccountReq\"\x13\n" +
-	"\x11UnlockAccountResp2\x9b\x03\n" +
-	"\x04Auth\x12V\n" +
-	"\x06Signup\x12\x16.api.auth.v1.SignupReq\x1a\x17.api.auth.v1.SignupResp\"\x1b\x82\xd3\xe4\x93\x02\x15:\x01*\"\x10/auth/v1/sign_up\x12Q\n" +
+	"\x11UnlockAccountResp2\xb0\x03\n" +
+	"\x04Auth\x12k\n" +
+	"\rCreateAccount\x12\x1d.api.auth.v1.CreateAccountReq\x1a\x1e.api.auth.v1.CreateAccountResp\"\x1b\x82\xd3\xe4\x93\x02\x15:\x01*\"\x10/auth/v1/sign_up\x12Q\n" +
 	"\x05Login\x12\x15.api.auth.v1.LoginReq\x1a\x16.api.auth.v1.LoginResp\"\x19\x82\xd3\xe4\x93\x02\x13:\x01*\"\x0e/auth/v1/login\x12N\n" +
 	"\rDeleteAccount\x12\x1d.api.auth.v1.DeleteAccountReq\x1a\x1e.api.auth.v1.DeleteAccountResp\x12H\n" +
 	"\vLockAccount\x12\x1b.api.auth.v1.LockAccountReq\x1a\x1c.api.auth.v1.LockAccountResp\x12N\n" +
@@ -483,8 +482,8 @@ func file_auth_v1_auth_proto_rawDescGZIP() []byte {
 
 var file_auth_v1_auth_proto_msgTypes = make([]protoimpl.MessageInfo, 10)
 var file_auth_v1_auth_proto_goTypes = []any{
-	(*SignupReq)(nil),         // 0: api.auth.v1.SignupReq
-	(*SignupResp)(nil),        // 1: api.auth.v1.SignupResp
+	(*CreateAccountReq)(nil),  // 0: api.auth.v1.CreateAccountReq
+	(*CreateAccountResp)(nil), // 1: api.auth.v1.CreateAccountResp
 	(*LoginReq)(nil),          // 2: api.auth.v1.LoginReq
 	(*LoginResp)(nil),         // 3: api.auth.v1.LoginResp
 	(*DeleteAccountReq)(nil),  // 4: api.auth.v1.DeleteAccountReq
@@ -495,12 +494,12 @@ var file_auth_v1_auth_proto_goTypes = []any{
 	(*UnlockAccountResp)(nil), // 9: api.auth.v1.UnlockAccountResp
 }
 var file_auth_v1_auth_proto_depIdxs = []int32{
-	0, // 0: api.auth.v1.Auth.Signup:input_type -> api.auth.v1.SignupReq
+	0, // 0: api.auth.v1.Auth.CreateAccount:input_type -> api.auth.v1.CreateAccountReq
 	2, // 1: api.auth.v1.Auth.Login:input_type -> api.auth.v1.LoginReq
 	4, // 2: api.auth.v1.Auth.DeleteAccount:input_type -> api.auth.v1.DeleteAccountReq
 	6, // 3: api.auth.v1.Auth.LockAccount:input_type -> api.auth.v1.LockAccountReq
 	8, // 4: api.auth.v1.Auth.UnlockAccount:input_type -> api.auth.v1.UnlockAccountReq
-	1, // 5: api.auth.v1.Auth.Signup:output_type -> api.auth.v1.SignupResp
+	1, // 5: api.auth.v1.Auth.CreateAccount:output_type -> api.auth.v1.CreateAccountResp
 	3, // 6: api.auth.v1.Auth.Login:output_type -> api.auth.v1.LoginResp
 	5, // 7: api.auth.v1.Auth.DeleteAccount:output_type -> api.auth.v1.DeleteAccountResp
 	7, // 8: api.auth.v1.Auth.LockAccount:output_type -> api.auth.v1.LockAccountResp

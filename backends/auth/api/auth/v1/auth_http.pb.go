@@ -19,38 +19,38 @@ var _ = binding.EncodeURL
 
 const _ = http.SupportPackageIsVersion1
 
+const OperationAuthCreateAccount = "/api.auth.v1.Auth/CreateAccount"
 const OperationAuthLogin = "/api.auth.v1.Auth/Login"
-const OperationAuthSignup = "/api.auth.v1.Auth/Signup"
 
 type AuthHTTPServer interface {
+	CreateAccount(context.Context, *CreateAccountReq) (*CreateAccountResp, error)
 	Login(context.Context, *LoginReq) (*LoginResp, error)
-	Signup(context.Context, *SignupReq) (*SignupResp, error)
 }
 
 func RegisterAuthHTTPServer(s *http.Server, srv AuthHTTPServer) {
 	r := s.Route("/")
-	r.POST("/auth/v1/sign_up", _Auth_Signup0_HTTP_Handler(srv))
+	r.POST("/auth/v1/sign_up", _Auth_CreateAccount0_HTTP_Handler(srv))
 	r.POST("/auth/v1/login", _Auth_Login0_HTTP_Handler(srv))
 }
 
-func _Auth_Signup0_HTTP_Handler(srv AuthHTTPServer) func(ctx http.Context) error {
+func _Auth_CreateAccount0_HTTP_Handler(srv AuthHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
-		var in SignupReq
+		var in CreateAccountReq
 		if err := ctx.Bind(&in); err != nil {
 			return err
 		}
 		if err := ctx.BindQuery(&in); err != nil {
 			return err
 		}
-		http.SetOperation(ctx, OperationAuthSignup)
+		http.SetOperation(ctx, OperationAuthCreateAccount)
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.Signup(ctx, req.(*SignupReq))
+			return srv.CreateAccount(ctx, req.(*CreateAccountReq))
 		})
 		out, err := h(ctx, &in)
 		if err != nil {
 			return err
 		}
-		reply := out.(*SignupResp)
+		reply := out.(*CreateAccountResp)
 		return ctx.Result(200, reply)
 	}
 }
@@ -78,8 +78,8 @@ func _Auth_Login0_HTTP_Handler(srv AuthHTTPServer) func(ctx http.Context) error 
 }
 
 type AuthHTTPClient interface {
+	CreateAccount(ctx context.Context, req *CreateAccountReq, opts ...http.CallOption) (rsp *CreateAccountResp, err error)
 	Login(ctx context.Context, req *LoginReq, opts ...http.CallOption) (rsp *LoginResp, err error)
-	Signup(ctx context.Context, req *SignupReq, opts ...http.CallOption) (rsp *SignupResp, err error)
 }
 
 type AuthHTTPClientImpl struct {
@@ -90,11 +90,11 @@ func NewAuthHTTPClient(client *http.Client) AuthHTTPClient {
 	return &AuthHTTPClientImpl{client}
 }
 
-func (c *AuthHTTPClientImpl) Login(ctx context.Context, in *LoginReq, opts ...http.CallOption) (*LoginResp, error) {
-	var out LoginResp
-	pattern := "/auth/v1/login"
+func (c *AuthHTTPClientImpl) CreateAccount(ctx context.Context, in *CreateAccountReq, opts ...http.CallOption) (*CreateAccountResp, error) {
+	var out CreateAccountResp
+	pattern := "/auth/v1/sign_up"
 	path := binding.EncodeURL(pattern, in, false)
-	opts = append(opts, http.Operation(OperationAuthLogin))
+	opts = append(opts, http.Operation(OperationAuthCreateAccount))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
 	if err != nil {
@@ -103,11 +103,11 @@ func (c *AuthHTTPClientImpl) Login(ctx context.Context, in *LoginReq, opts ...ht
 	return &out, nil
 }
 
-func (c *AuthHTTPClientImpl) Signup(ctx context.Context, in *SignupReq, opts ...http.CallOption) (*SignupResp, error) {
-	var out SignupResp
-	pattern := "/auth/v1/sign_up"
+func (c *AuthHTTPClientImpl) Login(ctx context.Context, in *LoginReq, opts ...http.CallOption) (*LoginResp, error) {
+	var out LoginResp
+	pattern := "/auth/v1/login"
 	path := binding.EncodeURL(pattern, in, false)
-	opts = append(opts, http.Operation(OperationAuthSignup))
+	opts = append(opts, http.Operation(OperationAuthLogin))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
 	if err != nil {

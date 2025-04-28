@@ -28,12 +28,12 @@ paths:
         post:
             tags:
                 - Auth
-            operationId: Auth_Signup
+            operationId: Auth_CreateAccount
             requestBody:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/api.auth.v1.SignupReq'
+                            $ref: '#/components/schemas/api.auth.v1.CreateAccountReq'
                 required: true
             responses:
                 "200":
@@ -41,7 +41,7 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/api.auth.v1.SignupResp'
+                                $ref: '#/components/schemas/api.auth.v1.CreateAccountResp'
     /auth/version:
         get:
             tags:
@@ -56,12 +56,24 @@ paths:
                                 $ref: '#/components/schemas/version.VersionReply'
 components:
     schemas:
+        api.auth.v1.CreateAccountReq:
+            type: object
+            properties:
+                username:
+                    type: string
+                pwd:
+                    type: string
+        api.auth.v1.CreateAccountResp:
+            type: object
+            properties:
+                uid:
+                    type: string
         api.auth.v1.LoginReq:
             type: object
             properties:
                 uid:
                     type: string
-                hashPwd:
+                pwd:
                     type: string
         api.auth.v1.LoginResp:
             type: object
@@ -69,18 +81,6 @@ components:
                 accessToken:
                     type: string
                 refreshToken:
-                    type: string
-        api.auth.v1.SignupReq:
-            type: object
-            properties:
-                username:
-                    type: string
-                hashPwd:
-                    type: string
-        api.auth.v1.SignupResp:
-            type: object
-            properties:
-                uid:
                     type: string
         version.VersionReply:
             type: object
