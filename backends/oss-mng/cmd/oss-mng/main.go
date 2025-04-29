@@ -3,17 +3,17 @@ package main
 import (
 	"flag"
 	"os"
-	"time"
 
 	"oss-mng/internal/conf"
 
+	"github.com/go-kratos/kratos/contrib/config/consul/v2"
 	"github.com/go-kratos/kratos/v2"
 	"github.com/go-kratos/kratos/v2/config"
-	"github.com/go-kratos/kratos/v2/config/file"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/middleware/tracing"
 	"github.com/go-kratos/kratos/v2/transport/grpc"
 	"github.com/go-kratos/kratos/v2/transport/http"
+	"github.com/hashicorp/consul/api"
 
 	_ "go.uber.org/automaxprocs"
 )
@@ -24,22 +24,9 @@ var (
 	Name string
 	// Version is the version of the compiled software.
 	Version string
-	// flagconf is the config flag.
-	flagconf string
-	// etcd configs
-	etcdEntry   string
-	etcdPath    string
-	etcdTimeout int64 // in seconds
 
 	id, _ = os.Hostname()
 )
-
-func init() {
-	flag.StringVar(&flagconf, "conf", "../../configs", "config path, eg: -conf config.yaml")
-	flag.StringVar(&etcdEntry, "etcd", "", "etcd endpoint, e.g, 127.0.0.1:2379")
-	flag.StringVar(&etcdPath, "etcd_path", "/oss-mng", "etcd path, e.g, /app-conf")
-	flag.Int64Var(&etcdTimeout, "etcd_timeout", 60, "etcd timeout in seconds, default to 60")
-}
 
 func newApp(logger log.Logger, gs *grpc.Server, hs *http.Server) *kratos.App {
 	return kratos.New(
@@ -67,11 +54,17 @@ func main() {
 		"span.id", tracing.SpanID(),
 	)
 
-	c := config.New(
-		config.WithSource(
-			makeSources()...,
-		),
-	)
+	consulClient, err := api.NewClient(&api.Config{
+		Address: "127.0.0.1:8500",
+	})
+	if err != nil {
+		panic(err)
+	}
+	cs, err := consul.New(consulClient, consul.WithPath("app/cart/configs/"))
+	if err != nil {
+		panic(err)
+	}
+	c := config.New(config.WithSource(cs))
 	defer c.Close()
 
 	if err := c.Load(); err != nil {
@@ -93,15 +86,4 @@ func main() {
 	if err := app.Run(); err != nil {
 		panic(err)
 	}
-}
-
-func makeSources() (sources []config.Source) {
-	if flagconf != "" {
-		sources = append(sources, file.NewSource(flagconf))
-	}
-	if etcdEntry != "" {
-		sources = append(sources, conf.NewEtcdSource(etcdEntry, etcdPath, time.Duration(etcdTimeout)*time.Second))
-	}
-
-	return
 }
