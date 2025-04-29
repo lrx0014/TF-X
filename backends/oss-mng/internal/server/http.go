@@ -1,6 +1,8 @@
 package server
 
 import (
+	"github.com/go-kratos/kratos/v2/middleware/auth/jwt"
+	jwtv5 "github.com/golang-jwt/jwt/v5"
 	verApi "oss-mng/api/version"
 	"oss-mng/internal/conf"
 	ver "oss-mng/internal/service/version"
@@ -15,6 +17,9 @@ func NewHTTPServer(c *conf.Server, version *ver.VersionService, logger log.Logge
 	var opts = []http.ServerOption{
 		http.Middleware(
 			recovery.Recovery(),
+			jwt.Server(func(token *jwtv5.Token) (interface{}, error) {
+				return []byte("your-access-token-secret"), nil
+			}),
 		),
 	}
 	if c.Http.Network != "" {

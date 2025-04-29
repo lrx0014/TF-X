@@ -56,10 +56,9 @@ func (s *AuthService) Login(ctx context.Context, req *pb.LoginReq) (resp *pb.Log
 	if err != nil {
 		return
 	}
-	
+
 	resp.AccessToken = accessToken
 	resp.RefreshToken = refreshToken
-
 	return
 }
 

@@ -35,7 +35,7 @@ var (
 )
 
 func init() {
-	flag.StringVar(&flagconf, "conf", "", "config path, eg: -conf config.yaml")
+	flag.StringVar(&flagconf, "conf", "../../configs", "config path, eg: -conf config.yaml")
 	flag.StringVar(&etcdEntry, "etcd", "", "etcd endpoint, e.g, 127.0.0.1:2379")
 	flag.StringVar(&etcdPath, "etcd_path", "/oss-mng", "etcd path, e.g, /app-conf")
 	flag.Int64Var(&etcdTimeout, "etcd_timeout", 60, "etcd timeout in seconds, default to 60")
