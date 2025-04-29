@@ -82,18 +82,18 @@ func (uc *UserUseCase) Login(ctx context.Context, username, pwd string) (accessT
 		return
 	}
 
-	accessToken, err = generateJWT(user.UID, user.Username, AccessTokenTTL)
+	accessToken, err = generateJWT(user.UID, user.Username, TypeAccess, AccessTokenTTL, accessTokenSecret)
 	if err != nil {
 		log.Errorf("failed to generate access token: %v", err)
 		return
 	}
 
-	refreshToken, err = generateJWT(user.UID, user.Username, RefreshTokenTTL)
+	refreshToken, err = generateJWT(user.UID, user.Username, TypeRefresh, RefreshTokenTTL, refreshTokenSecret)
 	if err != nil {
 		log.Errorf("failed to generate refresh token: %v", err)
 		return
 	}
-	
+
 	return
 }
 
