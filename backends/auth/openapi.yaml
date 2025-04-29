@@ -6,6 +6,24 @@ info:
     title: ""
     version: 0.0.1
 paths:
+    /auth/v1/create_account:
+        post:
+            tags:
+                - Auth
+            operationId: Auth_CreateAccount
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.auth.v1.CreateAccountReq'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.auth.v1.CreateAccountResp'
     /auth/v1/login:
         post:
             tags:
@@ -24,24 +42,6 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/api.auth.v1.LoginResp'
-    /auth/v1/sign_up:
-        post:
-            tags:
-                - Auth
-            operationId: Auth_CreateAccount
-            requestBody:
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/api.auth.v1.CreateAccountReq'
-                required: true
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/api.auth.v1.CreateAccountResp'
     /auth/version:
         get:
             tags:

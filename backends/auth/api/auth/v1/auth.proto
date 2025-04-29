@@ -11,7 +11,7 @@ option java_package = "api.auth.v1";
 service Auth {
 	rpc CreateAccount (CreateAccountReq) returns (CreateAccountResp) {
 		option (google.api.http) = {
-			post: "/auth/v1/sign_up"
+			post: "/auth/v1/create_account"
 			body: "*"
 		};
 	}

@@ -459,9 +459,9 @@ const file_auth_v1_auth_proto_rawDesc = "" +
 	"\x0eLockAccountReq\"\x11\n" +
 	"\x0fLockAccountResp\"\x12\n" +
 	"\x10UnlockAccountReq\"\x13\n" +
-	"\x11UnlockAccountResp2\xb0\x03\n" +
-	"\x04Auth\x12k\n" +
-	"\rCreateAccount\x12\x1d.api.auth.v1.CreateAccountReq\x1a\x1e.api.auth.v1.CreateAccountResp\"\x1b\x82\xd3\xe4\x93\x02\x15:\x01*\"\x10/auth/v1/sign_up\x12Q\n" +
+	"\x11UnlockAccountResp2\xb7\x03\n" +
+	"\x04Auth\x12r\n" +
+	"\rCreateAccount\x12\x1d.api.auth.v1.CreateAccountReq\x1a\x1e.api.auth.v1.CreateAccountResp\"\"\x82\xd3\xe4\x93\x02\x1c:\x01*\"\x17/auth/v1/create_account\x12Q\n" +
 	"\x05Login\x12\x15.api.auth.v1.LoginReq\x1a\x16.api.auth.v1.LoginResp\"\x19\x82\xd3\xe4\x93\x02\x13:\x01*\"\x0e/auth/v1/login\x12N\n" +
 	"\rDeleteAccount\x12\x1d.api.auth.v1.DeleteAccountReq\x1a\x1e.api.auth.v1.DeleteAccountResp\x12H\n" +
 	"\vLockAccount\x12\x1b.api.auth.v1.LockAccountReq\x1a\x1c.api.auth.v1.LockAccountResp\x12N\n" +

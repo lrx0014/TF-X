@@ -29,7 +29,7 @@ type AuthHTTPServer interface {
 
 func RegisterAuthHTTPServer(s *http.Server, srv AuthHTTPServer) {
 	r := s.Route("/")
-	r.POST("/auth/v1/sign_up", _Auth_CreateAccount0_HTTP_Handler(srv))
+	r.POST("/auth/v1/create_account", _Auth_CreateAccount0_HTTP_Handler(srv))
 	r.POST("/auth/v1/login", _Auth_Login0_HTTP_Handler(srv))
 }
 
@@ -92,7 +92,7 @@ func NewAuthHTTPClient(client *http.Client) AuthHTTPClient {
 
 func (c *AuthHTTPClientImpl) CreateAccount(ctx context.Context, in *CreateAccountReq, opts ...http.CallOption) (*CreateAccountResp, error) {
 	var out CreateAccountResp
-	pattern := "/auth/v1/sign_up"
+	pattern := "/auth/v1/create_account"
 	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation(OperationAuthCreateAccount))
 	opts = append(opts, http.PathTemplate(pattern))

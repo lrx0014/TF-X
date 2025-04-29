@@ -7,6 +7,8 @@ import (
 	"context"
 
 	pb "auth/api/auth/v1"
+	_ "github.com/lrx0014/ScalableFlake/pkg/driver/redis"
+	"github.com/lrx0014/ScalableFlake/pkg/snowflake"
 )
 
 type AuthService struct {
@@ -35,10 +37,15 @@ func (s *AuthService) CreateAccount(ctx context.Context, req *pb.CreateAccountRe
 		return
 	}
 
-	// TODO generate an UID
+	// generate an UID
+	uid, err := snowflake.GenerateUID("auth")
+	if err != nil {
+		err = global.ErrGenerateUIDFailed
+		return
+	}
 
 	user := &biz.User{
-		UID:      0,
+		UID:      int64(uid),
 		Username: req.Username,
 		Pwd:      req.Pwd,
 	}
@@ -47,6 +54,7 @@ func (s *AuthService) CreateAccount(ctx context.Context, req *pb.CreateAccountRe
 		return
 	}
 
+	resp.Uid = int64(uid)
 	return
 }
 
