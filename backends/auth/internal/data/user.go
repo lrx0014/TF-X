@@ -15,8 +15,13 @@ func NewUserRepo(data *Data) biz.UserRepo {
 	}
 }
 
-func (u *userRepo) UserByID(ctx context.Context, uid int64) (user *biz.User, err error) {
+func (u *userRepo) UserByUID(ctx context.Context, uid int64) (user *biz.User, err error) {
 	err = u.data.db.First(&user, "uid = ?", uid).Error
+	return
+}
+
+func (u *userRepo) UserByUsername(ctx context.Context, username string) (user *biz.User, err error) {
+	err = u.data.db.First(&user, "username = ?", username).Error
 	return
 }
 

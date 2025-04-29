@@ -120,7 +120,7 @@ func (x *CreateAccountResp) GetUid() int64 {
 
 type LoginReq struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Uid           int64                  `protobuf:"varint,1,opt,name=uid,proto3" json:"uid,omitempty"`
+	Username      string                 `protobuf:"bytes,1,opt,name=username,proto3" json:"username,omitempty"`
 	Pwd           string                 `protobuf:"bytes,2,opt,name=pwd,proto3" json:"pwd,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -156,11 +156,11 @@ func (*LoginReq) Descriptor() ([]byte, []int) {
 	return file_auth_v1_auth_proto_rawDescGZIP(), []int{2}
 }
 
-func (x *LoginReq) GetUid() int64 {
+func (x *LoginReq) GetUsername() string {
 	if x != nil {
-		return x.Uid
+		return x.Username
 	}
-	return 0
+	return ""
 }
 
 func (x *LoginReq) GetPwd() string {
@@ -447,9 +447,9 @@ const file_auth_v1_auth_proto_rawDesc = "" +
 	"\busername\x18\x01 \x01(\tR\busername\x12\x10\n" +
 	"\x03pwd\x18\x02 \x01(\tR\x03pwd\"%\n" +
 	"\x11CreateAccountResp\x12\x10\n" +
-	"\x03uid\x18\x01 \x01(\x03R\x03uid\".\n" +
-	"\bLoginReq\x12\x10\n" +
-	"\x03uid\x18\x01 \x01(\x03R\x03uid\x12\x10\n" +
+	"\x03uid\x18\x01 \x01(\x03R\x03uid\"8\n" +
+	"\bLoginReq\x12\x1a\n" +
+	"\busername\x18\x01 \x01(\tR\busername\x12\x10\n" +
 	"\x03pwd\x18\x02 \x01(\tR\x03pwd\"S\n" +
 	"\tLoginResp\x12!\n" +
 	"\faccess_token\x18\x01 \x01(\tR\vaccessToken\x12#\n" +

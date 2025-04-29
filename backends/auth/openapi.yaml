@@ -71,7 +71,7 @@ components:
         api.auth.v1.LoginReq:
             type: object
             properties:
-                uid:
+                username:
                     type: string
                 pwd:
                     type: string

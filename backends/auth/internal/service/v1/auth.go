@@ -8,7 +8,6 @@ import (
 
 	pb "auth/api/auth/v1"
 	_ "github.com/lrx0014/ScalableFlake/pkg/driver/redis"
-	"github.com/lrx0014/ScalableFlake/pkg/snowflake"
 )
 
 type AuthService struct {
@@ -37,19 +36,12 @@ func (s *AuthService) CreateAccount(ctx context.Context, req *pb.CreateAccountRe
 		return
 	}
 
-	// generate an UID
-	uid, err := snowflake.GenerateUID("auth")
-	if err != nil {
-		err = global.ErrGenerateUIDFailed
-		return
-	}
-
 	user := &biz.User{
-		UID:      int64(uid),
+		UID:      0, // generate in biz
 		Username: req.Username,
 		Pwd:      req.Pwd,
 	}
-	err = s.uc.CreateUser(ctx, user)
+	uid, err := s.uc.CreateUser(ctx, user)
 	if err != nil {
 		return
 	}
@@ -60,19 +52,13 @@ func (s *AuthService) CreateAccount(ctx context.Context, req *pb.CreateAccountRe
 
 func (s *AuthService) Login(ctx context.Context, req *pb.LoginReq) (resp *pb.LoginResp, err error) {
 	resp = &pb.LoginResp{}
-	user, err := s.uc.GetUserByID(ctx, req.Uid)
+	accessToken, refreshToken, err := s.uc.Login(ctx, req.GetUsername(), req.GetPwd())
 	if err != nil {
 		return
 	}
-
-	if user == nil || user.ID == 0 {
-		err = global.ErrUserNotFound
-		return
-	}
-
-	// TODO
-	resp.AccessToken = user.Username
-	resp.RefreshToken = user.Username
+	
+	resp.AccessToken = accessToken
+	resp.RefreshToken = refreshToken
 
 	return
 }

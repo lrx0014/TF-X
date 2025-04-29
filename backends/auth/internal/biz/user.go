@@ -5,6 +5,7 @@ import (
 	"auth/internal/global"
 	"context"
 	"github.com/go-kratos/kratos/v2/log"
+	"github.com/lrx0014/ScalableFlake/pkg/snowflake"
 	"time"
 )
 
@@ -23,7 +24,8 @@ func (User) TableName() string {
 }
 
 type UserRepo interface {
-	UserByID(ctx context.Context, uid int64) (user *User, err error)
+	UserByUID(ctx context.Context, uid int64) (user *User, err error)
+	UserByUsername(ctx context.Context, username string) (user *User, err error)
 	CreateUser(ctx context.Context, user *User) (err error)
 }
 
@@ -39,7 +41,24 @@ func NewUserUseCase(repo UserRepo, appConf *conf.App) *UserUseCase {
 	}
 }
 
-func (uc *UserUseCase) CreateUser(ctx context.Context, user *User) (err error) {
+func (uc *UserUseCase) CreateUser(ctx context.Context, user *User) (uid uint64, err error) {
+	// generate an UID
+	uid, err = snowflake.GenerateUID("auth")
+	if err != nil {
+		err = global.ErrGenerateUIDFailed
+		return
+	}
+	user.UID = int64(uid)
+
+	// password hash
+	hashedPwd, err := hashPassword(user.Pwd)
+	if err != nil {
+		log.Errorf("hash password failed: %v", err)
+		err = global.ErrHashFailed
+		return
+	}
+	user.Pwd = hashedPwd
+
 	err = uc.repo.CreateUser(ctx, user)
 	if err != nil {
 		log.Errorf("[biz] CreateUser err: %+v", err.Error())
@@ -50,10 +69,49 @@ func (uc *UserUseCase) CreateUser(ctx context.Context, user *User) (err error) {
 	return
 }
 
-func (uc *UserUseCase) GetUserByID(ctx context.Context, uid int64) (user *User, err error) {
-	user, err = uc.repo.UserByID(ctx, uid)
+func (uc *UserUseCase) Login(ctx context.Context, username, pwd string) (accessToken, refreshToken string, err error) {
+	user, err := uc.GetUserByUsername(ctx, username)
+	if err != nil {
+		return
+	}
+
+	matched := verifyPassword(pwd, user.Pwd)
+	if !matched {
+		log.Errorf("[biz] Login error: %s != %s", pwd, user.Pwd)
+		err = global.ErrPasswordMismatch
+		return
+	}
+
+	accessToken, err = generateJWT(user.UID, user.Username, AccessTokenTTL)
+	if err != nil {
+		log.Errorf("failed to generate access token: %v", err)
+		return
+	}
+
+	refreshToken, err = generateJWT(user.UID, user.Username, RefreshTokenTTL)
+	if err != nil {
+		log.Errorf("failed to generate refresh token: %v", err)
+		return
+	}
+	
+	return
+}
+
+func (uc *UserUseCase) GetUserByUID(ctx context.Context, uid int64) (user *User, err error) {
+	user, err = uc.repo.UserByUID(ctx, uid)
 	if err != nil {
 		log.Errorf("[biz] GetUserByID err: %+v", err.Error())
+		err = global.ErrDBInternalError
+		return
+	}
+
+	return
+}
+
+func (uc *UserUseCase) GetUserByUsername(ctx context.Context, username string) (user *User, err error) {
+	user, err = uc.repo.UserByUsername(ctx, username)
+	if err != nil {
+		log.Errorf("[biz] GetUserByUsername err: %+v", err.Error())
 		err = global.ErrDBInternalError
 		return
 	}

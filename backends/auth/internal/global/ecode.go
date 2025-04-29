@@ -10,3 +10,5 @@ var ErrUsernameValidation = errors.New("username validation error, too short or 
 var ErrPasswordValidation = errors.New("password validation error, too short or too long")
 var ErrUserNotFound = errors.New("user not found")
 var ErrGenerateUIDFailed = errors.New("failed to generate uid")
+var ErrHashFailed = errors.New("failed to hash password")
+var ErrPasswordMismatch = errors.New("password mismatch")
